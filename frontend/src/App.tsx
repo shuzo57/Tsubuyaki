@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
 import Skeleton from './components/ui/Skeleton'
+import AmoebaBackground from './components/AmoebaBackground'
 import { Heart, Trash } from 'lucide-react'
 import { Toaster, toast } from 'react-hot-toast'
 import './App.css'
@@ -62,7 +63,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-surface text-accent antialiased">
+    <div className="min-h-screen bg-surface text-accent antialiased relative">
+      <AmoebaBackground />
       <div className="container mx-auto px-4 lg:px-0 max-w-2xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
         <header className="bg-main text-white shadow-lg px-6 py-2 flex items-center justify-between">
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
