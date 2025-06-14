@@ -6,7 +6,8 @@ export default function AmoebaBackground() {
   const mountRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!mountRef.current) return
+    const mount = mountRef.current
+    if (!mount) return
 
     let width = window.innerWidth
     let height = window.innerHeight
@@ -18,7 +19,7 @@ export default function AmoebaBackground() {
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(width, height)
 
-    mountRef.current.appendChild(renderer.domElement)
+    mount.appendChild(renderer.domElement)
 
     const material = new THREE.MeshPhongMaterial({
       color: 0x6699ff,
@@ -68,7 +69,7 @@ export default function AmoebaBackground() {
     return () => {
       cancelAnimationFrame(id)
       window.removeEventListener('resize', handleResize)
-      mountRef.current?.removeChild(renderer.domElement)
+      mount.removeChild(renderer.domElement)
       renderer.dispose()
     }
   }, [])
