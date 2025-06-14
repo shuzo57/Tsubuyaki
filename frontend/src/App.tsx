@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ThemeToggle from './components/ThemeToggle'
+import Background from './components/Background'
 import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
 import Skeleton from './components/ui/Skeleton'
@@ -88,7 +89,8 @@ export default function App() {
   }
 
   return (
-    <div className={`${dark ? 'dark' : ''} min-h-screen bg-surface text-accent antialiased font-sans`}>
+    <div className={`${dark ? 'dark' : ''} relative min-h-screen bg-surface text-accent antialiased font-sans`}>
+      <Background />
       <div className="container mx-auto px-4 lg:px-0 max-w-xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
         <header className="bg-gradient-to-r from-main to-sub1 text-white shadow-lg px-6 py-3 rounded-b-xl flex items-center justify-between">
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>

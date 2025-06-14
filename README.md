@@ -25,9 +25,16 @@ pip install -r requirements.txt
 python app.py
 ```
 
+### Build frontend for production
+```bash
+cd frontend
+npm install
+npm run build
+```
+
 ## 起動方法
-- フロントエンド: `npm run dev` を実行すると `http://localhost:5173` で起動します。
-- バックエンド: `python app.py` を実行すると `http://localhost:5000` でAPIが起動します。
+- 開発時はフロントエンド: `npm run dev` で `http://localhost:5173` に起動します。
+- バックエンド: `python app.py` を実行すると `http://localhost:5000` で API とビルド済みフロントエンドが提供されます。
 
 ## API 仕様
 - `GET /posts`

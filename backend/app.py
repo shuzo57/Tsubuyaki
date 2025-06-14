@@ -1,11 +1,19 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from models import Post, add_post, get_posts
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../frontend/dist', static_url_path='/')
     CORS(app)
+
+    @app.route('/')
+    def index():
+        return app.send_static_file('index.html')
+
+    @app.route('/<path:path>')
+    def static_proxy(path: str):
+        return send_from_directory(app.static_folder, path)
 
     @app.route('/posts', methods=['GET', 'POST'])
     def posts():
