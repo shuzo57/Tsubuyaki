@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import ThemeToggle from './components/ThemeToggle'
-import Toast from './components/Toast'
 import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
+import Skeleton from './components/ui/Skeleton'
+import { Heart, Trash } from 'lucide-react'
+import { Toaster, toast } from 'react-hot-toast'
 import './App.css'
 
 interface Post {
@@ -14,20 +16,15 @@ interface Post {
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([])
   const [dark, setDark] = useState(false)
-  const [toast, setToast] = useState('')
-
-  const showToast = (msg: string) => {
-    setToast(msg)
-    setTimeout(() => setToast(''), 2000)
-  }
+  const [loading, setLoading] = useState(true)
 
   const submitPost = async () => {
     if (!content.trim()) {
-      showToast('投稿内容を入力してください')
+      toast.error('投稿内容を入力してください')
       return
     }
     if (content.length > 140) {
-      showToast('140字以内で入力してください')
+      toast.error('140字以内で入力してください')
       return
     }
     await fetch('http://localhost:5000/posts', {
@@ -37,14 +34,17 @@ export default function App() {
     })
     clear()
     fetchPosts()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const { value: content, onChange, onKeyDown, clear } = useTextarea(submitPost)
 
   const fetchPosts = async () => {
+    setLoading(true)
     const res = await fetch('http://localhost:5000/posts')
     const data = await res.json()
     setPosts(data)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -63,13 +63,13 @@ export default function App() {
   }
 
   return (
-    <div className={dark ? 'dark bg-gray-900 min-h-screen text-white' : 'bg-gray-100 min-h-screen'}>
-      <div className="mx-auto max-w-[600px] p-4">
-        <header className="mb-4 flex items-center">
-          <h1 className="text-xl font-bold">Tsubuyaki</h1>
+    <div className={`${dark ? 'dark' : ''} min-h-screen bg-surface text-accent antialiased`}>
+      <div className="container mx-auto px-4 lg:px-0 max-w-2xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
+        <header className="bg-main text-white shadow-lg px-6 py-2 flex items-center justify-between">
+          <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
           <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
         </header>
-        <form onSubmit={submit} className="mb-4 flex gap-2">
+        <form onSubmit={submit} className="flex gap-2">
           <textarea
             value={content}
             onChange={onChange}
@@ -77,21 +77,35 @@ export default function App() {
             placeholder="What's happening?"
             className="flex-1 rounded border p-2"
           />
-          <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+          <button className="bg-sub1 text-white hover:bg-sub1/80 px-4 py-2 rounded-md hover:scale-110 transition-transform duration-150">
             Post
           </button>
         </form>
-        <ul className="grid grid-cols-2 gap-4">
-          {posts.map((post) => (
-            <article key={post.id} className="rounded-lg bg-white p-4 shadow dark:bg-gray-800">
-              <p>{post.content}</p>
-              <time className="mt-2 block text-xs text-gray-500 dark:text-gray-400">
-                {timeAgo(post.created_at)}
-              </time>
-            </article>
-          ))}
+        <ul className="grid grid-cols-1 gap-4">
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-24" />
+              ))
+            : posts.map((post) => (
+                <article
+                  key={post.id}
+                  className="bg-white/10 dark:bg-white/5 backdrop-blur-lg ring-1 ring-white/20 shadow-sm rounded-xl p-4 flex items-start gap-3"
+                >
+                  <div className="bg-main text-white size-10 rounded-full grid place-items-center font-bold">
+                    U
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm sm:text-base leading-relaxed">{post.content}</p>
+                    <time className="text-xs text-gray">{timeAgo(post.created_at)}</time>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <Heart className="size-4 cursor-pointer hover:scale-110 transition-transform duration-150" />
+                    <Trash className="size-4 cursor-pointer hover:scale-110 transition-transform duration-150" />
+                  </div>
+                </article>
+              ))}
         </ul>
-        <Toast message={toast} show={!!toast} />
+        <Toaster position="top-right" />
       </div>
     </div>
   )

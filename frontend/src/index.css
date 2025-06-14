@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --main: #004CA0;
+  --sub1: #C9A333;
+  --surface: #FFFFFF;
+  --gray: #DBDBDB;
+  --accent: #000000;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #111827;
+    --gray: #374151;
+  }
+}

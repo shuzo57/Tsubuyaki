@@ -5,7 +5,15 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        main: 'var(--main)',
+        sub1: 'var(--sub1)',
+        surface: 'var(--surface)',
+        gray: 'var(--gray)',
+        accent: 'var(--accent)',
+      },
+    },
   },
   plugins: [],
 }
