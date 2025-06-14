@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import ThemeToggle from './components/ThemeToggle'
 import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
@@ -17,6 +17,7 @@ export default function App() {
   const [posts, setPosts] = useState<Post[]>([])
   const [dark, setDark] = useState(false)
   const [loading, setLoading] = useState(true)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
   const submitPost = async () => {
     if (!content.trim()) {
@@ -33,6 +34,7 @@ export default function App() {
       body: JSON.stringify({ content }),
     })
     clear()
+    textareaRef.current?.focus()
     fetchPosts()
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -57,25 +59,38 @@ export default function App() {
     }
   }, [posts])
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'n' && e.target === document.body) {
+        e.preventDefault()
+        textareaRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     submitPost()
   }
 
   return (
-    <div className={`${dark ? 'dark' : ''} min-h-screen bg-surface text-accent antialiased`}>
+    <div className={`${dark ? 'dark' : ''} min-h-screen text-accent font-sans`}>
       <div className="container mx-auto px-4 lg:px-0 max-w-2xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
         <header className="bg-main text-white shadow-lg px-6 py-2 flex items-center justify-between">
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
           <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
         </header>
-        <form onSubmit={submit} className="flex gap-2">
+        <form onSubmit={submit} className="flex gap-2 bg-white/40 dark:bg-white/5 backdrop-blur-md rounded-xl p-4 shadow">
           <textarea
+            ref={textareaRef}
             value={content}
             onChange={onChange}
             onKeyDown={onKeyDown}
             placeholder="What's happening?"
-            className="flex-1 rounded border p-2"
+            className="flex-1 rounded-lg border border-gray p-3 focus:ring-2 focus:ring-main/50 focus:outline-none"
+            autoFocus
           />
           <button className="bg-sub1 text-white hover:bg-sub1/80 px-4 py-2 rounded-md hover:scale-110 transition-transform duration-150">
             Post
@@ -89,7 +104,7 @@ export default function App() {
             : posts.map((post) => (
                 <article
                   key={post.id}
-                  className="bg-white/10 dark:bg-white/5 backdrop-blur-lg ring-1 ring-white/20 shadow-sm rounded-xl p-4 flex items-start gap-3"
+                  className="bg-white/70 dark:bg-white/10 backdrop-blur-lg ring-1 ring-white/30 shadow-md rounded-2xl p-4 flex items-start gap-3 transition hover:shadow-lg"
                 >
                   <div className="bg-main text-white size-10 rounded-full grid place-items-center font-bold">
                     U

@@ -13,6 +13,9 @@ export default {
         gray: 'var(--gray)',
         accent: 'var(--accent)',
       },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [],
