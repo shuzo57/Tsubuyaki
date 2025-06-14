@@ -1,4 +1,4 @@
-import { FaMoon, FaSun } from 'react-icons/fa'
+import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 interface Props {
   dark: boolean
@@ -9,9 +9,9 @@ export default function ThemeToggle({ dark, toggle }: Props) {
   return (
     <button
       onClick={toggle}
-      className="ml-auto grid size-8 place-items-center rounded-md hover:scale-110 transition-transform duration-150"
+      className="grid size-8 place-items-center rounded-md hover:scale-110 transition-transform duration-150"
     >
-      {dark ? <FaSun size={18} /> : <FaMoon size={18} />}
+      {dark ? <MdLightMode size={20} /> : <MdDarkMode size={20} />}
       <span className="sr-only">Toggle theme</span>
     </button>
   )

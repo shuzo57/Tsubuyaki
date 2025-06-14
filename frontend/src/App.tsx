@@ -4,6 +4,7 @@ import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
 import Skeleton from './components/ui/Skeleton'
 import { FaHeart, FaTrash } from 'react-icons/fa'
+import { FiSend } from 'react-icons/fi'
 import { Toaster, toast } from 'react-hot-toast'
 import './App.css'
 
@@ -88,21 +89,24 @@ export default function App() {
   }
 
   return (
-    <div className={`${dark ? 'dark' : ''} min-h-screen bg-surface text-accent antialiased font-sans`}>
+    <div className={`${dark ? 'dark' : ''} min-h-screen bg-gradient-to-br from-gray-50 to-surface dark:from-gray-900 dark:to-gray-800 text-accent antialiased font-sans`}>
       <div className="container mx-auto px-4 lg:px-0 max-w-xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
-        <header className="bg-gradient-to-r from-main to-sub1 text-white shadow-lg px-6 py-3 rounded-b-xl flex items-center justify-between">
-          <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
-          <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
+        <header className="relative bg-white dark:bg-gray-800 shadow-md rounded-xl py-4">
+          <h1 className="text-center font-bold text-2xl">Tsubuyaki</h1>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+            <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
+          </div>
         </header>
-        <form onSubmit={submit} className="flex gap-2">
+        <form onSubmit={submit} className="relative bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
           <textarea
             value={content}
             onChange={onChange}
             onKeyDown={onKeyDown}
             placeholder="What's happening?"
-            className="flex-1 rounded-md border border-gray p-2 focus:ring-2 focus:ring-main focus:outline-none"
+            className="w-full h-24 resize-none rounded-md border border-gray bg-transparent p-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-main focus:outline-none"
           />
-          <button className="bg-main text-white hover:bg-main/90 px-4 py-2 rounded-md transition-colors">
+          <button className="absolute bottom-4 right-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-1 transition-colors">
+            <FiSend size={16} />
             Post
           </button>
         </form>
@@ -114,29 +118,27 @@ export default function App() {
             : posts.map((post) => (
                 <article
                   key={post.id}
-                  className="animate-fade-slide bg-white/70 dark:bg-white/5 backdrop-blur-md ring-1 ring-gray/30 shadow-md rounded-xl p-4 flex items-start gap-3"
+                  className="relative animate-fade-slide bg-white dark:bg-gray-800 shadow-md rounded-xl p-4 flex items-start gap-3"
                 >
-                  <div className="bg-gradient-to-br from-main to-sub1 text-white size-10 rounded-full grid place-items-center font-bold">
+                  <div className="bg-gradient-to-br from-main to-sub1 text-white size-10 rounded-full grid place-items-center font-bold shrink-0">
                     U
                   </div>
                   <div className="flex-1">
                     <p className="text-sm sm:text-base leading-relaxed">{post.content}</p>
-                    <time className="text-xs text-gray">{timeAgo(post.created_at)}</time>
+                    <time className="text-xs text-gray-500">{timeAgo(post.created_at)}</time>
                   </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <FaHeart
-                      onClick={() => handleLike(post.id)}
-                      className={
-                        `size-4 cursor-pointer transition-transform duration-150 ${
-                          liked.has(post.id) ? 'text-red-500 scale-110' : 'hover:scale-110'
-                        }`
-                      }
-                    />
-                    <FaTrash
-                      onClick={() => handleDelete(post.id)}
-                      className="size-4 cursor-pointer hover:scale-110 transition-transform duration-150"
-                    />
-                  </div>
+                  <FaHeart
+                    onClick={() => handleLike(post.id)}
+                    className={
+                      `absolute right-10 top-4 size-4 cursor-pointer transition-transform duration-150 ${
+                        liked.has(post.id) ? 'text-red-500 scale-110' : 'hover:scale-110'
+                      }`
+                    }
+                  />
+                  <FaTrash
+                    onClick={() => handleDelete(post.id)}
+                    className="absolute right-4 bottom-4 size-4 cursor-pointer text-gray-400 hover:text-red-500 transition-colors"
+                  />
                 </article>
               ))}
         </ul>
