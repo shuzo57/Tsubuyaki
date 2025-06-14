@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import ThemeToggle from './components/ThemeToggle'
+// ThemeToggle removed
 import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
 import Skeleton from './components/ui/Skeleton'
@@ -15,7 +15,6 @@ interface Post {
 
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([])
-  const [dark, setDark] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const submitPost = async () => {
@@ -63,11 +62,11 @@ export default function App() {
   }
 
   return (
-    <div className={`${dark ? 'dark' : ''} min-h-screen bg-surface text-accent antialiased`}>
+    <div className="min-h-screen bg-surface text-accent antialiased">
       <div className="container mx-auto px-4 lg:px-0 max-w-2xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
         <header className="bg-main text-white shadow-lg px-6 py-2 flex items-center justify-between">
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
-          <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
+          {/* Theme toggle removed */}
         </header>
         <form onSubmit={submit} className="flex gap-2">
           <textarea
