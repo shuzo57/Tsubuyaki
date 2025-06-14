@@ -62,9 +62,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-surface text-accent antialiased">
-      <div className="container mx-auto px-4 lg:px-0 max-w-2xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
-        <header className="bg-main text-white shadow-lg px-6 py-2 flex items-center justify-between">
+    <div className="min-h-screen bg-surface text-accent antialiased font-sans">
+      <div className="container mx-auto px-4 lg:px-0 max-w-xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
+        <header className="bg-gradient-to-r from-main to-sub1 text-white shadow-lg px-6 py-3 rounded-b-xl flex items-center justify-between">
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
           {/* Theme toggle removed */}
         </header>
@@ -74,9 +74,9 @@ export default function App() {
             onChange={onChange}
             onKeyDown={onKeyDown}
             placeholder="What's happening?"
-            className="flex-1 rounded border p-2"
+            className="flex-1 rounded-md border border-gray p-2 focus:ring-2 focus:ring-main focus:outline-none"
           />
-          <button className="bg-sub1 text-white hover:bg-sub1/80 px-4 py-2 rounded-md hover:scale-110 transition-transform duration-150">
+          <button className="bg-main text-white hover:bg-main/90 px-4 py-2 rounded-md transition-colors">
             Post
           </button>
         </form>
@@ -88,9 +88,9 @@ export default function App() {
             : posts.map((post) => (
                 <article
                   key={post.id}
-                  className="bg-white/10 dark:bg-white/5 backdrop-blur-lg ring-1 ring-white/20 shadow-sm rounded-xl p-4 flex items-start gap-3"
+                  className="bg-white/70 dark:bg-white/5 backdrop-blur-md ring-1 ring-gray/30 shadow-md rounded-xl p-4 flex items-start gap-3"
                 >
-                  <div className="bg-main text-white size-10 rounded-full grid place-items-center font-bold">
+                  <div className="bg-gradient-to-br from-main to-sub1 text-white size-10 rounded-full grid place-items-center font-bold">
                     U
                   </div>
                   <div className="flex-1">

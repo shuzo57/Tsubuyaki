@@ -3,15 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --main: #002366;
-  --sub1: #D4AF37;
-  --surface: #FFFFFF;
-  --gray: #DBDBDB;
-  --accent: #000000;
+  --main: #6366f1;
+  --sub1: #f43f5e;
+  --surface: #f9fafb;
+  --gray: #d1d5db;
+  --accent: #111827;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surface: #111827;
-    --gray: #374151;
+    --surface: #1f2937;
+    --gray: #4b5563;
   }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
 }
