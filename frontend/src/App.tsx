@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import ThemeToggle from './components/ThemeToggle'
 import './App.css'
 
 interface Post {
@@ -7,9 +8,10 @@ interface Post {
   created_at: string
 }
 
-function App() {
+export default function App() {
   const [posts, setPosts] = useState<Post[]>([])
   const [content, setContent] = useState('')
+  const [dark, setDark] = useState(false)
 
   const fetchPosts = async () => {
     const res = await fetch('http://localhost:5000/posts')
@@ -34,24 +36,31 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>Tsubuyaki</h1>
-      <form onSubmit={submit}>
-        <input
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="What's happening?"
-        />
-      </form>
-      <div>
-        {posts.map((post) => (
-          <div key={post.id} className="post">
-            {post.content}
-          </div>
-        ))}
+    <div className={dark ? 'dark bg-gray-900 min-h-screen text-white' : 'bg-gray-100 min-h-screen'}>
+      <div className="mx-auto max-w-[600px] p-4">
+        <header className="mb-4 flex items-center">
+          <h1 className="text-xl font-bold">Tsubuyaki</h1>
+          <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
+        </header>
+        <form onSubmit={submit} className="mb-4 flex gap-2">
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="What's happening?"
+            className="flex-1 rounded border p-2"
+          />
+          <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+            Post
+          </button>
+        </form>
+        <ul className="grid grid-cols-2 gap-4">
+          {posts.map((post) => (
+            <article key={post.id} className="rounded-lg bg-white p-4 shadow dark:bg-gray-800">
+              {post.content}
+            </article>
+          ))}
+        </ul>
       </div>
     </div>
   )
 }
-
-export default App
