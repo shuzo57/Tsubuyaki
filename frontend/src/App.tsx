@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ThemeToggle from './components/ThemeToggle'
+import AmoebaBackground from './components/AmoebaBackground'
 import useTextarea from './utils/useTextarea'
 import { timeAgo } from './utils/time'
 import Skeleton from './components/ui/Skeleton'
@@ -64,6 +65,7 @@ export default function App() {
 
   return (
     <div className={`${dark ? 'dark' : ''} min-h-screen bg-surface text-accent antialiased`}>
+      <AmoebaBackground />
       <div className="container mx-auto px-4 lg:px-0 max-w-2xl py-10 space-y-6 text-[15px] leading-6 sm:text-base lg:text-lg">
         <header className="bg-main text-white shadow-lg px-6 py-2 flex items-center justify-between">
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
