@@ -11,6 +11,7 @@ interface Post {
   id: number
   content: string
   created_at: string
+  reply_to?: number | null
 }
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [dark, setDark] = useState(false)
   const [liked, setLiked] = useState<Set<number>>(new Set())
+  const [replyTo, setReplyTo] = useState<number | null>(null)
 
   const submitPost = async () => {
     if (!content.trim()) {
@@ -31,9 +33,10 @@ export default function App() {
     await fetch('http://localhost:5000/posts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content }),
+      body: JSON.stringify({ content, reply_to: replyTo }),
     })
     clear()
+    setReplyTo(null)
     fetchPosts()
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -94,6 +97,18 @@ export default function App() {
           <h1 className="font-bold text-xl text-white">Tsubuyaki</h1>
           <ThemeToggle dark={dark} toggle={() => setDark(!dark)} />
         </header>
+        {replyTo !== null && (
+          <div className="text-sm text-gray flex items-center gap-2">
+            Replying to post #{replyTo}
+            <button
+              type="button"
+              onClick={() => setReplyTo(null)}
+              className="underline"
+            >
+              cancel
+            </button>
+          </div>
+        )}
         <form onSubmit={submit} className="flex gap-2">
           <textarea
             value={content}
@@ -111,7 +126,8 @@ export default function App() {
             ? Array.from({ length: 3 }).map((_, i) => (
                 <Skeleton key={i} className="h-24" />
               ))
-            : posts.map((post) => (
+            : posts.filter((p) => !p.reply_to).map((post) => (
+                <>
                 <article
                   key={post.id}
                   className="animate-fade-slide bg-white/70 dark:bg-white/5 backdrop-blur-md ring-1 ring-gray/30 shadow-md rounded-xl p-4 flex items-start gap-3"
@@ -136,8 +152,31 @@ export default function App() {
                       onClick={() => handleDelete(post.id)}
                       className="size-4 cursor-pointer hover:scale-110 transition-transform duration-150"
                     />
+                    <button
+                      onClick={() => setReplyTo(post.id)}
+                      className="text-xs text-main hover:underline"
+                    >
+                      Reply
+                    </button>
                   </div>
                 </article>
+                {posts
+                  .filter((r) => r.reply_to === post.id)
+                  .map((reply) => (
+                    <article
+                      key={reply.id}
+                      className="ml-8 mt-2 animate-fade-slide bg-white/60 dark:bg-white/5 backdrop-blur-md ring-1 ring-gray/20 shadow-md rounded-xl p-3 flex items-start gap-3"
+                    >
+                      <div className="bg-gradient-to-br from-main to-sub1 text-white size-8 rounded-full grid place-items-center font-bold">
+                        U
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm leading-relaxed">{reply.content}</p>
+                        <time className="text-xs text-gray">{timeAgo(reply.created_at)}</time>
+                      </div>
+                    </article>
+                  ))}
+                </>
               ))}
         </ul>
         <Toaster position="top-right" />
