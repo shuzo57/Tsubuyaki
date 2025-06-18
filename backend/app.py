@@ -11,7 +11,10 @@ def create_app():
     def posts():
         if request.method == 'POST':
             data = request.get_json() or {}
-            post = Post(content=data.get('content', ''))
+            post = Post(
+                content=data.get('content', ''),
+                reply_to=data.get('reply_to'),
+            )
             add_post(post)
             return jsonify(post.to_dict()), 201
         posts = get_posts()

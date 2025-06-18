@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 
 _posts: List["Post"] = []
@@ -11,6 +11,7 @@ _posts: List["Post"] = []
 @dataclass
 class Post:
     content: str
+    reply_to: Optional[int] = None
     id: int = field(init=False)
     created_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -26,6 +27,7 @@ class Post:
             "id": self.id,
             "content": self.content,
             "created_at": self.created_at.isoformat(),
+            "reply_to": self.reply_to,
         }
 
 
